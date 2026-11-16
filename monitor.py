@@ -85,7 +85,24 @@ def main():
 
     with open(STATE_FILE, "w") as file:
         json.dump(new_state, file, indent=2)
-    send_telegram("✅ Standoff 2 Monitor is online!")
+    def send_telegram(message):
+    token = os.environ["TELEGRAM_BOT_TOKEN"]
+    chat_id = os.environ["TELEGRAM_CHAT_ID"]
+
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    data = urlencode({
+        "chat_id": chat_id,
+        "text": message
+    }).encode()
+
+    request = urllib.request.Request(url, data=data)
+
+    try:
+        with urllib.request.urlopen(request, timeout=20) as response:
+            print("TELEGRAM RESPONSE:", response.read().decode())
+    except urllib.error.HTTPError as error:
+        print("TELEGRAM ERROR:", error.read().decode())
+        raise
 
 if __name__ == "__main__":
     main()
