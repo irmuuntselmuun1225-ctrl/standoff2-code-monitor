@@ -85,7 +85,7 @@ def main():
 
     with open(STATE_FILE, "w") as file:
         json.dump(new_state, file, indent=2)
-
+        send_telegram("✅ Standoff 2 Monitor is online!")
 
 if __name__ == "__main__":
     main()
